@@ -1,14 +1,11 @@
-#러닝레이트 에포크
+# 러닝레이트 실험
+learning_rates = [1e-5, 3e-5, 1e-4, 3e-4, 1e-3, 3e-3, 1e-2, 3e-2]
+nb_epochs = 3
 
-
-learning_rates = [1e-5, 1e-3, 3e-2]
-epoch_list = [3, 5, 10]
-print("=== 러닝레이트랑 에포크 비교 실험 시작 ===\n")
-
-def train_and_eval(lr, epochs):
+def train_and_eval(lr):
     model = MLP().to(device)
     optimizer = optim.Adam(model.parameters(), lr=lr)
-    for epoch in range(epochs):
+    for epoch in range(nb_epochs):
         model.train()
         for batch in train_loader:
             imgs = batch["image"].to(device)
@@ -18,6 +15,7 @@ def train_and_eval(lr, epochs):
             loss.backward()
             optimizer.step()
 
+    
     model.eval()
     correct, total = 0, 0
     with torch.no_grad():
@@ -29,25 +27,24 @@ def train_and_eval(lr, epochs):
             correct += (preds == labels).sum().item()
     return 100 * correct / total
 
-
+print("=== 러닝레이트 실험 시작 ===\n")
 for lr in learning_rates:
-    for ep in epoch_list:
-        acc = train_and_eval(lr, ep)
-        print(f"Learning Rate {lr:.0e}, Epochs {ep} -> Test Accuracy: {acc:.2f}%")
+    acc = train_and_eval(lr)
+    print(f"Learning Rate {lr:.0e} -> Test Accuracy: {acc:.2f}%")
 print("\n=== 실험 종료 ===")
 
 
-#결과
-=== 러닝레이트랑 에포크 비교 실험 시작 ===
 
-Learning Rate 1e-05, Epochs 3 -> Test Accuracy: 85.12%
-Learning Rate 1e-05, Epochs 5 -> Test Accuracy: 87.95%
-Learning Rate 1e-05, Epochs 10 -> Test Accuracy: 90.37%
-Learning Rate 1e-03, Epochs 3 -> Test Accuracy: 96.94%
-Learning Rate 1e-03, Epochs 5 -> Test Accuracy: 97.49%
-Learning Rate 1e-03, Epochs 10 -> Test Accuracy: 97.76%
-Learning Rate 3e-02, Epochs 3 -> Test Accuracy: 91.29%
-Learning Rate 3e-02, Epochs 5 -> Test Accuracy: 90.38%
-Learning Rate 3e-02, Epochs 10 -> Test Accuracy: 91.50%
+#결과
+=== 러닝레이트 실험 시작 ===
+
+Learning Rate 1e-05 -> Test Accuracy: 84.44%
+Learning Rate 3e-05 -> Test Accuracy: 89.92%
+Learning Rate 1e-04 -> Test Accuracy: 92.68%
+Learning Rate 3e-04 -> Test Accuracy: 95.31%
+Learning Rate 1e-03 -> Test Accuracy: 97.08%
+Learning Rate 3e-03 -> Test Accuracy: 96.90%
+Learning Rate 1e-02 -> Test Accuracy: 95.84%
+Learning Rate 3e-02 -> Test Accuracy: 92.88%
 
 === 실험 종료 ===
