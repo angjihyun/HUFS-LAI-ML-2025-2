@@ -68,3 +68,4 @@ category_model.pkl
 priority_model.pkl
 tfidf_vectorizer.pkl
 feature_scaler.pkl
+https://drive.google.com/file/d/109JSlKd3MmBdjq2KIs8eeJ-NlUlyPmjT/view?usp=share_link
